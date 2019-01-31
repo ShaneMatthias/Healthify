@@ -3,7 +3,7 @@ import { View, Text } from 'react-native'
 import LoginComponent from './LoginComponent'
 import SignUpComponent from './SignUpComponent'
 import firebase from 'firebase'
-import API_KEY from '../config/firebase'
+import config from '../config/config'
 
 export default class Homescreen extends Component {
     static navigationOptions={
@@ -12,7 +12,7 @@ export default class Homescreen extends Component {
 
     componentWillMount() {
         firebase.initializeApp({
-        apiKey: API_KEY,
+        apiKey: config.API_KEY,
         authDomain: "healthify-327e5.firebaseapp.com",
         databaseURL: "https://healthify-327e5.firebaseio.com",
         projectId: "healthify-327e5",

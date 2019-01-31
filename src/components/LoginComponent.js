@@ -1,10 +1,71 @@
 import React, { Component } from 'react'
-import { View } from 'react-native'
+import { View, Text, ActivityIndicator } from 'react-native'
 import { Input, Button, Icon } from 'react-native-elements' 
+import firebase from 'firebase'
 
 export default class LoginComponent extends Component {
     static navigationOptions = {
         header: null
+    }
+
+    state = { email: '', password: '', loading: false, error: '', authFail: false }
+
+    onButtonPress = () => {
+        const { email, password } = this.state
+
+        this.setState({ error: '', loading: true, authFail: false })
+
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(this.onLoginSuccess)
+            .catch(this.onLoginFail)
+    }
+
+    onLoginFail = () => {
+        this.setState({
+            email: '',
+            password: '',
+            loading: false,
+            authFail: true,
+            error: 'Authentication Failed'
+        })
+    }
+
+    onLoginSuccess = () => {
+        this.setState({
+            email: '',
+            password: '',
+            loading: false,
+            authFail: false,
+            error: ''
+        })
+    }
+
+    loading = () => {
+        if(this.state.loading) 
+            return (
+                <View style={styles.loadingStyle}>
+                    <ActivityIndicator />
+                </View> 
+            )
+
+        return (
+            <View style={styles.buttonContainer}>
+                <Button
+                    style={styles.buttonStyle}
+                    title='Log in'
+                    icon={<Icon name='sign-in' type='font-awesome' size={28} />}
+                    titleStyle={styles.buttonTitleStyle}
+                    onPress={this.onButtonPress}
+                />
+                <Button 
+                    style={styles.buttonStyle}
+                    title='Sign up'
+                    icon={<Icon name='user-plus' type='font-awesome' />}
+                    titleStyle={styles.buttonTitleStyle}
+                    onPress={() => this.props.renderLogin(false)}
+                />
+            </View>
+        )
     }
 
     render() {
@@ -14,6 +75,8 @@ export default class LoginComponent extends Component {
                     autoCorrect={false}
                     style={styles.inputStyle}
                     placeholder="Email"
+                    value={this.state.email}
+                    onChangeText={email => this.setState({ email })}
                     leftIcon={<Icon name='envelope' type='font-awesome' />}
                     leftIconContainerStyle={styles.iconStyle}
                 />
@@ -21,25 +84,18 @@ export default class LoginComponent extends Component {
                     autoCorrect={false}
                     style={styles.inputStyle}
                     placeholder="Password"
+                    value={this.state.password}
+                    onChangeText={password => this.setState({ password })}
                     leftIcon={<Icon name='lock' type='font-awesome' size={34} />}   
                     leftIconContainerStyle={styles.iconStyle} 
+                    secureTextEntry={true}
                 />
 
-                <View style={styles.buttonContainer}>
-                    <Button
-                        style={styles.buttonStyle}
-                        title='Log in'
-                        icon={<Icon name='sign-in' type='font-awesome' size={28} />}
-                        titleStyle={styles.buttonTitleStyle}
-                    />
-                    <Button 
-                        style={styles.buttonStyle}
-                        title='Sign up'
-                        icon={<Icon name='user-plus' type='font-awesome' />}
-                        titleStyle={styles.buttonTitleStyle}
-                        onPress={() => this.props.renderLogin(false)}
-                    />
-                </View>
+                {this.loading()}
+
+                <Text style={styles.errorStyle}>
+                    {this.state.error}
+                </Text>
             </View>
         )
     }
@@ -76,5 +132,18 @@ const styles = {
 
     buttonTitleStyle: {
         paddingLeft: '5%'
+    },
+
+    loadingStyle: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: '3%',
+    },
+
+    errorStyle: {
+        fontSize: 12,
+        alignSelf: 'center',
+        color: 'red',
     }
 }
