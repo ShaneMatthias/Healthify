@@ -2,10 +2,23 @@ import React, { Component } from 'react'
 import { View, Text } from 'react-native'
 import LoginComponent from './LoginComponent'
 import SignUpComponent from './SignUpComponent'
+import firebase from 'firebase'
+import API_KEY from '../config/firebase'
 
 export default class Homescreen extends Component {
     static navigationOptions={
         header: null
+    }
+
+    componentWillMount() {
+        firebase.initializeApp({
+        apiKey: API_KEY,
+        authDomain: "healthify-327e5.firebaseapp.com",
+        databaseURL: "https://healthify-327e5.firebaseio.com",
+        projectId: "healthify-327e5",
+        storageBucket: "healthify-327e5.appspot.com",
+        messagingSenderId: "46159617781"
+        })
     }
     
     state = { login: true } 
