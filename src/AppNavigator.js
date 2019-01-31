@@ -1,10 +1,10 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation'
-import LoginComponent from './components/LoginComponent'
-import SignUpComponent from './components/SignUpComponent'
+import NewUserSignUp from './components/NewUserSignUp'
+import Homescreen from './components/Homescreen'
 
 const AppNavigator = createStackNavigator({
-    LoginComponent: { screen: LoginComponent },
-    SignUpComponent: { screen: SignUpComponent },
+    Homescreen: { screen: Homescreen },
+    NewUserSignUp: { screen: NewUserSignUp },
 })
 
 export default createAppContainer(AppNavigator)

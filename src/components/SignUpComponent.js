@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View } from 'react-native'
-import { Input, Button, Icon, Text } from 'react-native-elements' 
+import { Input, Button, Icon } from 'react-native-elements' 
 
 export default class LoginComponent extends Component {
     static navigationOptions={
@@ -8,47 +8,45 @@ export default class LoginComponent extends Component {
     }
 
     render() {
-        return (
-            <View style={styles.containerStyle}>
-                <Text style={styles.titleStyle}>Healthify</Text>    
-                <View style={styles.formContainerStyle}>
-                    <Input 
-                        autoCorrect={false}
-                        style={styles.inputStyle}
-                        placeholder="Username"
-                        leftIcon={<Icon name='user' type='font-awesome' size={28} />}
-                        leftIconContainerStyle={styles.iconStyle}
-                    />
-                    <Input 
-                        autoCorrect={false}
-                        style={styles.inputStyle}
-                        placeholder="Email"
-                        leftIcon={<Icon name='envelope' type='font-awesome' />}
-                        leftIconContainerStyle={styles.iconStyle}
-                    />
-                    <Input 
-                        autoCorrect={false}
-                        style={styles.inputStyle}
-                        placeholder="Password"
-                        leftIcon={<Icon name='lock' type='font-awesome' size={34} />}   
-                        leftIconContainerStyle={styles.iconStyle} 
-                    />
+        return (   
+            <View style={styles.formContainerStyle}>
+                <Input 
+                    autoCorrect={false}
+                    style={styles.inputStyle}
+                    placeholder="Username"
+                    leftIcon={<Icon name='user' type='font-awesome' size={28} />}
+                    leftIconContainerStyle={styles.iconStyle}
+                />
+                <Input 
+                    autoCorrect={false}
+                    style={styles.inputStyle}
+                    placeholder="Email"
+                    leftIcon={<Icon name='envelope' type='font-awesome' />}
+                    leftIconContainerStyle={styles.iconStyle}
+                />
+                <Input 
+                    autoCorrect={false}
+                    style={styles.inputStyle}
+                    placeholder="Password"
+                    leftIcon={<Icon name='lock' type='font-awesome' size={34} />}   
+                    leftIconContainerStyle={styles.iconStyle} 
+                />
 
-                    <View style={styles.buttonContainer}>
-                        <Button
-                            style={styles.buttonStyle}
-                            title='Log in'
-                            icon={<Icon name='sign-in' type='font-awesome' size={28} />}
-                            titleStyle={styles.buttonTitleStyle}
-                            onPress={() => this.props.navigation.navigate('LoginComponent')}
-                        />
-                        <Button 
-                            style={styles.buttonStyle}
-                            title='Sign up'
-                            icon={<Icon name='user-plus' type='font-awesome' />}
-                            titleStyle={styles.buttonTitleStyle}
-                        />
-                    </View>
+                <View style={styles.buttonContainer}>
+                    <Button
+                        style={styles.buttonStyle}
+                        title='Log in'
+                        icon={<Icon name='sign-in' type='font-awesome' size={28} />}
+                        titleStyle={styles.buttonTitleStyle}
+                        onPress={() => this.props.renderLogin(true)}
+                    />
+                    <Button 
+                        style={styles.buttonStyle}
+                        title='Sign up'
+                        icon={<Icon name='user-plus' type='font-awesome' />}
+                        titleStyle={styles.buttonTitleStyle}
+                        onPress={() => this.props.navigate.navigate('NewUserSignUp')}
+                    />
                 </View>
             </View>
         )
@@ -56,20 +54,6 @@ export default class LoginComponent extends Component {
 }
 
 const styles = {
-    containerStyle: {
-        flex: 1,
-        backgroundColor: '#51b9c6',
-        justifyConent: 'center',
-        alignItems: 'center',
-        paddingTop: 200,
-    },
-
-    titleStyle: {
-        fontSize: 70,
-        fontFamily: 'Cochin',
-        paddingBottom: 180
-    },
-
     formContainerStyle: {
         justifyContent: 'center',
         alignItems: 'center',
