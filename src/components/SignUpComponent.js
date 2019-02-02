@@ -18,8 +18,6 @@ export default class LoginComponent extends Component {
             .then(this.onSignUpSuccess)
             .catch(error => {
                 this.setState({
-                    username: '',
-                    email: '',
                     password: '',
                     loading: false,
                     authFail: true,
@@ -37,20 +35,7 @@ export default class LoginComponent extends Component {
             authFail: false,
             error: ''
         })
-        this.props.navigate.navigate('NewUserSignUp')
     }
-
-    onSignUpFail = () => {
-        this.setState({
-            username: '',
-            email: '',
-            password: '',
-            loading: false,
-            authFail: true,
-            error: 'Sign Up Fail'
-        })
-    }
-
 
     loading = () => {
         if(this.state.loading) 
@@ -82,7 +67,7 @@ export default class LoginComponent extends Component {
 
     render() {
         return (   
-            <View style={styles.formContainerStyle}>
+            <View pointerEvents={this.state.loading ? 'none' : 'auto'} style={styles.formContainerStyle}>
                 <Input 
                     autoCorrect={false}
                     style={styles.inputStyle}

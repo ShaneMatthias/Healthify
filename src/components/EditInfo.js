@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { View, Picker, Text, Slider, DatePickerIOS } from 'react-native'
-import { Input, Button } from 'react-native-elements'
+import { View, Picker, Text, Slider } from 'react-native'
+import { Button } from 'react-native-elements'
+import firebase from 'firebase'
 
 export default class NewUserSignUp extends Component {
     static navigationOptions={
         title: 'Personal Info',
-        headerLeft: null
     }
 
     state = { gender: '', age: 18, weight: 40, height: 60, activity: 1, goal: 1 }
@@ -16,6 +16,14 @@ export default class NewUserSignUp extends Component {
     setHeight = (value) => { this.setState({ height: value }) }
     setActivity = (value) => { this.setState({ activity: value }) }
     setGoal = (value) => { this.setState({ goal: value })}
+
+    onButtonPress = () => {
+        const { gender, age, weight, height, activity, goal } = this.state
+        const currUser = firebase.auth().currentUser
+
+        firebase.database().ref(`/users/${currUser.uid}/info`)
+            .push({ gender, age, weight, height, activity, goal })
+    }
 
     render() {
         return(
@@ -41,14 +49,6 @@ export default class NewUserSignUp extends Component {
                     value={this.state.age}
                     onValueChange={this.setAge}   
                 />
-                {/* <DatePickerIOS 
-                    style={styles.datePickerStyle}
-                    itemStyle={{height: 100}}
-                    mode={'date'}
-                    date={this.state.birthdate}
-                    selectedValue={(this.state.birthdate)}
-                    onDateChange={this.setDate}
-                /> */}
 
                 <Text style={styles.labelStyle}>Weight:    {Math.round(this.state.weight*10)/10}kg     {Math.round(this.state.weight*22)/10}lbs</Text>
                 <Slider 
@@ -95,6 +95,7 @@ export default class NewUserSignUp extends Component {
 
                 <Button 
                     title='Submit'
+                    onPress={this.onButtonPress}
                 />
 
             </View>

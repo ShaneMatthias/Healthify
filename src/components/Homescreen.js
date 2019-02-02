@@ -27,7 +27,7 @@ export default class Homescreen extends Component {
 
     renderContent = () => {
         if (this.state.login)
-            return <LoginComponent renderLogin={this.renderLogin} />
+            return <LoginComponent renderLogin={this.renderLogin} navigate={this.props.navigation}/>
         return <SignUpComponent renderLogin={this.renderLogin} navigate={this.props.navigation} />
     }
 

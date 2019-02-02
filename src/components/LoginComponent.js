@@ -2,13 +2,28 @@ import React, { Component } from 'react'
 import { View, Text, ActivityIndicator } from 'react-native'
 import { Input, Button, Icon } from 'react-native-elements' 
 import firebase from 'firebase'
+import { NavigationActions, StackActions } from 'react-navigation'
 
 export default class LoginComponent extends Component {
     static navigationOptions = {
         header: null
     }
+    
+    state = { email: '', password: '', loading: true, error: '', authFail: false }
 
-    state = { email: '', password: '', loading: false, error: '', authFail: false }
+    componentWillMount() {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({ routeName: 'TabNavigator' })]
+                });
+                this.props.navigate.dispatch(resetAction)
+            } else {
+                this.setState({ loading: false })
+            }
+        });
+      }
 
     onButtonPress = () => {
         const { email, password } = this.state
@@ -70,7 +85,7 @@ export default class LoginComponent extends Component {
 
     render() {
         return (
-            <View style={styles.formContainerStyle}>
+            <View pointerEvents={this.state.loading ? 'none' : 'auto'} style={styles.formContainerStyle}>
                 <Input 
                     autoCorrect={false}
                     style={styles.inputStyle}
