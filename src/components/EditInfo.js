@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Picker, Text, Slider } from 'react-native'
+import { View, Picker, Text, Slider, ActivityIndicator } from 'react-native'
 import { Button } from 'react-native-elements'
 import firebase from 'firebase'
 
@@ -8,7 +8,7 @@ export default class NewUserSignUp extends Component {
         title: 'Personal Info',
     }
 
-    state = { gender: '', age: 18, weight: 40, height: 60, activity: 1, goal: 1 }
+    state = { gender: '', age: 18, weight: 40, height: 60, activity: 1, goal: 1, loading: false }
 
     setGender = (value) => { this.setState({ gender: value }) }
     setAge = (value) => { this.setState({ age: value }) }
@@ -20,9 +20,30 @@ export default class NewUserSignUp extends Component {
     onButtonPress = () => {
         const { gender, age, weight, height, activity, goal } = this.state
         const currUser = firebase.auth().currentUser
+        this.setState({ loading: true })
 
         firebase.database().ref(`/users/${currUser.uid}/info`)
-            .push({ gender, age, weight, height, activity, goal })
+            .update({ gender, age, weight, height, activity, goal })
+            .then(() => {
+                this.setState({ loading:false })
+                this.props.navigation.goBack()
+        })
+    }
+
+    loading = () => {
+        if(this.state.loading) 
+            return (
+                <View style={styles.loadingStyle}>
+                    <ActivityIndicator />
+                </View> 
+            )
+
+        return (
+            <Button 
+                title='Submit'
+                onPress={this.onButtonPress}
+            />
+        )
     }
 
     render() {
@@ -93,11 +114,8 @@ export default class NewUserSignUp extends Component {
                     <Picker.Item label='Gain weight' value={3} />
                 </Picker>
 
-                <Button 
-                    title='Submit'
-                    onPress={this.onButtonPress}
-                />
-
+                {this.loading()}
+                
             </View>
         )
     }
