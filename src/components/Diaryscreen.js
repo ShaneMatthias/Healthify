@@ -16,7 +16,6 @@ export default class Diaryscreen extends Component {
 
     renderFood = (data, usersFood) => {
         let title = data.charAt(0).toUpperCase() + data.slice(1)
-        // console.log(usersFood.bacon.thumbnail)
         return (
             <View key={data}>
                 <View style={styles.thumbnailContainerStyle}>
