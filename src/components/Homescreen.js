@@ -11,14 +11,16 @@ export default class Homescreen extends Component {
     }
 
     componentWillMount() {
-        firebase.initializeApp({
-        apiKey: config.API_KEY,
-        authDomain: "healthify-327e5.firebaseapp.com",
-        databaseURL: "https://healthify-327e5.firebaseio.com",
-        projectId: "healthify-327e5",
-        storageBucket: "healthify-327e5.appspot.com",
-        messagingSenderId: "46159617781"
-        })
+        if (!firebase.apps.length) {
+            firebase.initializeApp({
+            apiKey: config.API_KEY,
+            authDomain: "healthify-327e5.firebaseapp.com",
+            databaseURL: "https://healthify-327e5.firebaseio.com",
+            projectId: "healthify-327e5",
+            storageBucket: "healthify-327e5.appspot.com",
+            messagingSenderId: "46159617781"
+            })
+         }
     }
     
     state = { login: true } 

@@ -10,14 +10,16 @@ export default class Foodsearch extends Component {
     onTextChange = (search) => {
         this.setState ({ search })
 
-        fetch(`https://trackapi.nutritionix.com/v2/search/instant?query=${search}`, {
-            method: "GET", headers: { "x-app-id": config.APP_ID, "x-app-key": config.APP_KEY }
-            // "id":"bd4aa66e-3764-421c-a60f-e3b769f970e0", 
-            // "x-remote-user-id": "0" 
-        }).then(res => res.json())
-        .then(body => this.setState({ foodArray: body.common })
-        )
-        .catch(err => console.log(err))
+        if(search.trim() !== "") {
+            fetch(`https://trackapi.nutritionix.com/v2/search/instant?query=${search}`, {
+                method: "GET", headers: { "x-app-id": config.APP_ID, "x-app-key": config.APP_KEY }
+                // "id":"bd4aa66e-3764-421c-a60f-e3b769f970e0", 
+                // "x-remote-user-id": "0" 
+            }).then(res => res.json())
+            .then(body => this.setState({ foodArray: body.common })
+            )
+            .catch(err => console.log(err))
+        }
     }
 
     handlePress = (data) => {

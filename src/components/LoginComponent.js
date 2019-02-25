@@ -11,7 +11,7 @@ export default class LoginComponent extends Component {
     
     state = { email: '', password: '', loading: true, error: '', authFail: false }
 
-    componentWillMount() {
+    componentDidMount() {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 const resetAction = StackActions.reset({

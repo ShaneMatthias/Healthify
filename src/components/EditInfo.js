@@ -8,7 +8,7 @@ export default class NewUserSignUp extends Component {
         title: 'Personal Info',
     }
 
-    state = { gender: '', age: 18, weight: 40, height: 60, activity: 1, goal: 1, loading: false }
+    state = { gender: 'Male', age: 18, weight: 40, height: 60, activity: 1.2, goal: -299, loading: false, bmi: 0, caloricNeeds: 0  }
 
     setGender = (value) => { this.setState({ gender: value }) }
     setAge = (value) => { this.setState({ age: value }) }
@@ -18,12 +18,20 @@ export default class NewUserSignUp extends Component {
     setGoal = (value) => { this.setState({ goal: value })}
 
     onButtonPress = () => {
-        const { gender, age, weight, height, activity, goal } = this.state
+        let { gender, age, weight, height, activity, goal, bmi, caloricNeeds } = this.state
         const currUser = firebase.auth().currentUser
         this.setState({ loading: true })
 
+        if(gender === 'Male') {
+            bmi = 66 + activity * ((height/2.54) * 12.9) + ((weight*2.2) * 6.3) - (age * 6.8)
+        } else {
+            bmi = 655 + activity * ((height/2.54) * 4.7) + ((weight*2.2) * 4.3) - (age * 4.7) * activity
+        }
+
+        caloricNeeds = bmi + goal - 1
+
         firebase.database().ref(`/users/${currUser.uid}/info`)
-            .update({ gender, age, weight, height, activity, goal })
+            .update({ gender, age, weight, height, activity, goal, bmi, caloricNeeds })
             .then(() => {
                 this.setState({ loading:false })
                 this.props.navigation.goBack()
@@ -96,10 +104,10 @@ export default class NewUserSignUp extends Component {
                     selectedValue={(this.state.activity) || 1}
                     onValueChange={this.setActivity}
                 >
-                    <Picker.Item label='Sedentary' value={1} />
-                    <Picker.Item label='Light' value={2} />
-                    <Picker.Item label='Moderate' value={3} />
-                    <Picker.Item label='Extreme' value={4} />
+                    <Picker.Item label='Sedentary' value={1.2} />
+                    <Picker.Item label='Light' value={1.4} />
+                    <Picker.Item label='Moderate' value={1.55} />
+                    <Picker.Item label='Extreme' value={1.75} />
                 </Picker>
 
                 <Text style={styles.labelStyle}>Goal: </Text>
@@ -109,9 +117,9 @@ export default class NewUserSignUp extends Component {
                     selectedValue={(this.state.goal) || 1}
                     onValueChange={this.setGoal}
                 >
-                    <Picker.Item label='Lose weight' value={1} />
-                    <Picker.Item label='Maintain weight' value={2} />
-                    <Picker.Item label='Gain weight' value={3} />
+                    <Picker.Item label='Lose weight' value={-299} />
+                    <Picker.Item label='Maintain weight' value={1} />
+                    <Picker.Item label='Gain weight' value={301} />
                 </Picker>
 
                 {this.loading()}

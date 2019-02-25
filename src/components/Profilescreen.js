@@ -1,41 +1,45 @@
 import React, { Component } from 'react'
-import { View, Text } from 'react-native'
-import { Button } from 'react-native-elements'
+import { View } from 'react-native'
+import { NavigationActions, StackActions } from 'react-navigation'
+import { Button, Text } from 'react-native-elements'
 import firebase from 'firebase'
 
 export default class Profilescreen extends Component {
-    state = { haveData: false }
+    state = { haveData: false, userInfo: {} }
     
+    componentDidMount() {    
+        const currUser = firebase.auth().currentUser
+        firebase.database().ref(`/users/${currUser.uid}/info`).on('value', (snapshot) => {
+            if(snapshot.val() != null)
+                this.setState({ userInfo: snapshot.val() })
+        })
+    }
+
+    handleLogOut = () => {
+        firebase.auth().signOut().then(() => {
+            const resetAction = StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({routeName: 'Homescreen'})]
+            });
+            this.props.navigation.dispatch(resetAction);
+        })
+    }
+
     render() {
+        const { userInfo } = this.state
         return (
             <View style={styles.containerStyle}>
                 <Button 
                     title='Log Out'
-                    onPress={() => firebase.auth().signOut()}
+                    onPress={this.handleLogOut}
                 />
                 <Button 
                     title='Edit Info'
                     onPress={() => this.props.navigation.navigate('EditInfo')}
                 />
-                <Button 
-                    title='Test'
-                    onPress={() => 
-                        fetch('https://trackapi.nutritionix.com/v2/natural/nutrients', {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json",
-                                    "x-app-id": "0f038326", 
-                                    "x-app-key": "f83c766a2027ebca8b253676e675b3d4", 
-                                    // "id":"bd4aa66e-3764-421c-a60f-e3b769f970e0", 
-                                    // "x-remote-user-id": "0" 
-                            },
-                            body:JSON.stringify({
-                                'query': '1 banana'
-                            })
-                        }).then(res => res.json())
-                        .then(body => console.log(body))
-                        .catch(err => console.log(err))
-                    }
-                />
+
+                <Text>You burn {Math.round(userInfo['bmi']*10)/10} calories a day</Text>
+                <Text>You need to stay at {Math.round(userInfo['caloricNeeds']*10)/10} calories to reach your goal</Text>
             </View>
         )
     }
