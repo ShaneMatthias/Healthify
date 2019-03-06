@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import LoginComponent from './LoginComponent'
-import SignUpComponent from './SignUpComponent'
 import firebase from 'firebase'
 import config from '../config/config'
 
@@ -22,39 +21,29 @@ export default class Homescreen extends Component {
             })
          }
     }
-    
-    state = { login: true } 
-
-    renderLogin = (bool) => { this.setState({ login: bool }) }
-
-    renderContent = () => {
-        if (this.state.login)
-            return <LoginComponent renderLogin={this.renderLogin} navigate={this.props.navigation}/>
-        return <SignUpComponent renderLogin={this.renderLogin} navigate={this.props.navigation} />
-    }
 
     render() {
         return (
             <View style={styles.containerStyle}>
                 <Text style={styles.titleStyle}>Healthify</Text>  
-                {this.renderContent()}
+                <LoginComponent navigate={this.props.navigation}/>
             </View>
         )
     }
 }
 
-const styles = {
+const styles = StyleSheet.create({
     containerStyle: {
         flex: 1,
-        backgroundColor: '#51b9c6',
-        justifyConent: 'center',
+        backgroundColor: '#88BDBC',
+        justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 200,
     },
 
     titleStyle: {
-        fontSize: 70,
-        fontFamily: 'Cochin',
-        paddingBottom: 180
+        color: '#f2eee8',
+        fontSize: 80,
+        fontFamily: 'Futura',
+        paddingBottom: 60
     },
-}
+})
