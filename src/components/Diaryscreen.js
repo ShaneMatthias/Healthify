@@ -4,6 +4,16 @@ import { Button, Text, Image } from 'react-native-elements'
 import firebase from 'firebase'
 
 export default class Diaryscreen extends Component {
+    static navigationOptions = ({ navigation }) => ({
+        tabBarLabel: 'Diary',
+        tabBarIcon: ({ tintColor }) => (
+            <Image
+                source={require('../../assets/diary.png')}
+                style={{width: 25, height: 25, tintColor: tintColor}}
+            />
+        )
+    })
+
     state = { usersFood: {} }
 
     componentDidMount() {    

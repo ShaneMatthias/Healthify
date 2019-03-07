@@ -30,8 +30,25 @@ export default class NewUserSignUp extends Component {
 
         caloricNeeds = bmi + goal - 1
 
+        let protein = 0.8 * (2.2*weight)
+        let fat = (caloricNeeds * 0.3) / 9
+        let carbohydrate = (caloricNeeds - (protein*4) - (fat*9)) / 4
+        let sugars = (caloricNeeds * 0.1) / 4
+        let cholesterol = 300
+        let potassium = 3500
+        let sodium = 2300
+        let fiber = 21
+
+        if(gender === "Male") 
+            fiber = 35
+        
+
+
+
+
+
         firebase.database().ref(`/users/${currUser.uid}/info`)
-            .update({ gender, age, weight, height, activity, goal, bmi, caloricNeeds })
+            .update({ gender, age, weight, height, activity, goal, bmi, caloricNeeds, protein, fat, carbohydrate, sugars, fiber, cholesterol, sodium, potassium })
             .then(() => {
                 this.setState({ loading:false })
                 this.props.navigation.goBack()

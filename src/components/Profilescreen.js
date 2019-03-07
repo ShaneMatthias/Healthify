@@ -1,10 +1,20 @@
 import React, { Component } from 'react'
-import { View } from 'react-native'
+import { View, Image } from 'react-native'
 import { NavigationActions, StackActions } from 'react-navigation'
 import { Button, Text } from 'react-native-elements'
 import firebase from 'firebase'
 
 export default class Profilescreen extends Component {
+    static navigationOptions = ({ navigation }) => ({
+        tabBarLabel: 'Profile',
+        tabBarIcon: ({ tintColor }) => (
+            <Image
+                source={require('../../assets/profile.png')}
+                style={{width: 25, height: 25, tintColor: tintColor}}
+            />
+        )
+    })
+    
     state = { haveData: false, userInfo: {} }
     
     componentDidMount() {    

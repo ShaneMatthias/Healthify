@@ -8,13 +8,28 @@ import Foodsearch from './components/Foodsearch'
 import Fooddetails from './components/Fooddetails'
 
 const TabNavigator = createBottomTabNavigator({
-    Mainscreen: { screen: Mainscreen },
+    Mainscreen: { 
+        screen: Mainscreen,
+    },
     Diaryscreen: { screen: Diaryscreen },
     Profilescreen: { screen: Profilescreen }
 }, {
     initialRouteName: 'Mainscreen',
     lazyload: true,
     animationEnabled: true,
+    tabBarOptions: {
+        showLabel: false,
+        animationEnabled: true,
+        activeTintColor: '#494949',
+        inactiveTintColor: '#8e8e8e',
+        labelStyle: {
+            fontFamily: 'Futura'
+        },
+        style: {
+            paddingTop: 20,
+            backgroundColor: '#d1cac0'
+        }
+    }
 })
 
 const AppNavigator = createStackNavigator({
@@ -22,7 +37,7 @@ const AppNavigator = createStackNavigator({
     EditInfo: { screen: EditInfo },
     Foodsearch: { screen: Foodsearch },
     Fooddetails: { screen: Fooddetails },
-    TabNavigator: { screen: TabNavigator }
+    TabNavigator: { screen: TabNavigator, navigationOptions: { header: null } }
 })
 
 export default createAppContainer(AppNavigator)
