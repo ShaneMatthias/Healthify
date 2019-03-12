@@ -79,7 +79,7 @@ export default class LoginComponent extends Component {
                         <Text style={styles.loginText}>Sign up</Text>
                     </TouchableHighlight>
                     
-                    <TouchableHighlight style={[styles.buttonContainer, styles.signUoButton]} onPress={() => this.setState({ signUp: false, error: '' })}>
+                    <TouchableHighlight style={[styles.buttonContainer, styles.signUpButton]} onPress={() => this.setState({ signUp: false, error: '' })}>
                         <Text>Login</Text>
                     </TouchableHighlight>
                 </View>
@@ -90,11 +90,11 @@ export default class LoginComponent extends Component {
             <View>
                 <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={this.buttonLogin}>
                         <Text style={styles.loginText}>Login</Text>
-                    </TouchableHighlight>
-                    
-                    <TouchableHighlight style={[styles.buttonContainer, styles.signUpButton]} onPress={() => this.setState({ signUp: true, error: '' })}>
-                        <Text>Register</Text>
-                    </TouchableHighlight>
+                </TouchableHighlight>
+                
+                <TouchableHighlight style={[styles.buttonContainer, styles.signUpButton]} onPress={() => this.setState({ signUp: true, error: '' })}>
+                    <Text>Register</Text>
+                </TouchableHighlight>
             </View>
         )
     }

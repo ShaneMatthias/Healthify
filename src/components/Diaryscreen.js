@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, View } from 'react-native'
+import { ScrollView, View, TouchableHighlight } from 'react-native'
 import { Button, Text, Image } from 'react-native-elements'
 import firebase from 'firebase'
 
@@ -41,18 +41,17 @@ export default class Diaryscreen extends Component {
     render() {
         const { usersFood } = this.state
         return (
-            <ScrollView style={styles.containerStyle}>
-                <View>
-                    <Text>What did you eat today? </Text>
-
-                    {Object.keys(usersFood).map(food => this.renderFood(food, usersFood))}
-                    
-                    <Button 
-                        onPress={() => this.props.navigation.navigate('Foodsearch')}
-                        title='Add Food'
-                    />
-                </View>
+        <View style={styles.containerStyle}>
+            <ScrollView>
+                <View style={styles.titleContainer}><Text style={[styles.textStyle, styles.titleText]}>Food intake</Text></View>            
+                
+                <View>{Object.keys(usersFood).map(food => this.renderFood(food, usersFood))}</View>
             </ScrollView>
+
+            <TouchableHighlight style={styles.buttonContainer} onPress={() => this.props.navigation.navigate('Foodsearch')}>
+                <Text style={styles.textStyle}>Add food</Text>
+            </TouchableHighlight>
+        </View>
         )
     }
 }
@@ -60,7 +59,37 @@ export default class Diaryscreen extends Component {
 const styles = {
     containerStyle: {
         flex: 1,
-        padding: '4%'
+        backgroundColor: '#f2eee8',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: 60,
+        paddingLeft: 8,
+        paddingRight: 8
+    },
+
+    titleContainer: {
+        paddingBottom: 10
+    },
+
+    titleText: {
+        fontSize: 20,
+        color: "#494949"
+    },
+
+    buttonContainer: {
+        height:40,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom:20,
+        width:150,
+        borderRadius:30,
+        backgroundColor: "#254E58"
+    },
+
+    textStyle: {
+        color: 'white',
+        fontFamily: 'futura'
     },
 
     thumbnailContainerStyle: {

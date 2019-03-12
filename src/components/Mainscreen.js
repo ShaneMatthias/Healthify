@@ -21,7 +21,6 @@ export default class Mainscreen extends Component {
 
     componentDidMount() {
         const currUser = firebase.auth().currentUser
-        const { userInfo } = this.state
 
         firebase.database().ref(`/users/${currUser.uid}/info`).on('value', (snapshot) => {
             if(snapshot.val() != null) 
@@ -63,7 +62,7 @@ export default class Mainscreen extends Component {
             <View key={key} style={styles.macroContainer}>
                 <View><Text style={[styles.textStyle, styles.macroTitle]}>{title} </Text></View>
                 <View style={{alignItems: 'center'}}><Text style={[styles.textStyle, styles.macroNutrient]}>{parseInt(nutrients[key])}{unit}</Text></View>
-                <View style={{paddingTop: 18}}>
+                <View style={{paddingTop: 20}}>
                     <ProgressBarAnimated
                         borderRadius={2}
                         backgroundColor={color}
