@@ -35,8 +35,8 @@ const TabNavigator = createBottomTabNavigator({
 const AppNavigator = createStackNavigator({
     Homescreen: { screen: Homescreen },
     EditInfo: { screen: EditInfo },
-    Foodsearch: { screen: Foodsearch },
-    Fooddetails: { screen: Fooddetails },
+    Foodsearch: { screen: Foodsearch , navigationOptions: { header: null }},
+    Fooddetails: { screen: Fooddetails, navigationOptions: { header: null }},
     TabNavigator: { screen: TabNavigator, navigationOptions: { header: null } }
 })
 

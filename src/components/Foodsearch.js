@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text } from 'react-native'
-import { Input, Icon } from 'react-native-elements'
-import { ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput } from 'react-native'
+import { ScrollView, TouchableOpacity, TouchableHighlight, Image, Dimensions } from 'react-native';
 import config from '../config/config'
 
 export default class Foodsearch extends Component {
@@ -57,17 +56,24 @@ export default class Foodsearch extends Component {
     render() {
         return (
             <View style={styles.containerStyle}>
-                <Input 
-                    autoCorrect={false}
-                    style={styles.inputStyle}
-                    placeholder="Type in food"
-                    value={this.state.search}
-                    onChangeText={search => this.onTextChange(search)}
-                    leftIcon={<Icon name='search' type='font-awesome' />}
-                    leftIconContainerStyle={styles.iconStyle}
-                />
 
-                <ScrollView style={styles.scrollViewStyle}>
+                <TouchableHighlight underlayColor='transparent' onPress={() => this.props.navigation.goBack()} style={styles.backButtonStyle}>
+                    <Image
+                        source={require('../../assets/back.png')}
+                        style={{width:30, height:30}} />
+                </TouchableHighlight>  
+
+                <View style={styles.inputContainer}>
+                    <TextInput 
+                        style={styles.inputStyle}
+                        value={this.state.value}
+                        placeholder="Type in food"
+                        value={this.state.search}
+                        onChangeText={search => this.onTextChange(search)}
+                        />
+                </View>
+
+                <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle}>
                     {this.displaySearches()}
                 </ScrollView>
 
@@ -76,18 +82,37 @@ export default class Foodsearch extends Component {
     }
 }
 
-const styles = {
+const styles = StyleSheet.create({
     containerStyle: {
         flex: 1,
-        justifyConent: 'center',
+        justifyContent: 'center',
         alignItems: 'center',
         padding: '4%',
+        paddingTop: 50,
+        backgroundColor: '#f2eee8',
     },
-    
+
+    backButtonStyle: {
+        marginRight: 'auto',  
+        width:20, 
+        height:20
+    },
+
+    inputContainer: {
+        borderBottomColor: '#F5FCFF',
+        backgroundColor: '#f9f6f2',
+        marginTop: 30,
+        borderRadius:30,
+        borderBottomWidth: 1,
+        width: Dimensions.get('window').width - 40,
+        height:45,
+        marginBottom:20,
+    },
+
     inputStyle: {
-        borderStyle: 'solid',
-        borderColor: 'black',
-        borderRadius: '25',
+        height:45,
+        marginLeft:16,
+        borderBottomColor: '#FFFFFF',
     },
 
     iconStyle: {
@@ -104,6 +129,8 @@ const styles = {
     },
 
     textStyle: {
-        fontSize: 20
+        fontSize: 20,
+        fontFamily: 'Futura',
+        color: '#494949'
     },
-}
+})
