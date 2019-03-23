@@ -34,7 +34,7 @@ export default class Foodsearch extends Component {
                 'query': data.food_name
             })
         }).then(res => res.json())
-        .then(body => this.props.navigation.navigate('Fooddetails', { foodData: body, go_back_key: this.props.navigation.state.key }))
+        .then(body => this.props.navigation.navigate('Fooddetails', { foodData: body, edit: false ,go_back_key: this.props.navigation.state.key }))
         .catch(err => console.log(err))
     }
 

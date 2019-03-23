@@ -10,7 +10,7 @@ export default class Fooddetails extends Component {
         loading: false 
     }
 
-    handlePress = (val, foodData, nutrients) => {
+    handleAdd = (val, foodData, nutrients) => {
         const currUser = firebase.auth().currentUser
         this.setState({ loading: true })
         let macros = {}
@@ -31,6 +31,27 @@ export default class Fooddetails extends Component {
         })
     }
 
+    handleEdit = (val, foodData, nutrients) => {
+        const currUser = firebase.auth().currentUser
+        this.setState({ loading: true })
+        let macros = {}
+
+        Object.keys(nutrients).map(key => {
+            let temp = key.split("_")
+            let title = temp.slice(temp.length-1)
+            macros[title] = foodData[key]*val
+        })
+
+        macros["thumbnail"] = foodData.photo.thumb
+        
+        firebase.database().ref(`/users/${currUser.uid}/foods/${foodData.food_name}`)
+            .update(macros)
+            .then(() => {
+                this.setState({ loading:false })
+                this.props.navigation.goBack(this.props.navigation.goBack())
+        })
+    }
+
     renderButton = (val, foodData, nutrients) => {
         if(this.state.loading) 
             return (
@@ -38,6 +59,20 @@ export default class Fooddetails extends Component {
                     <ActivityIndicator />
                 </View> 
             )
+        
+        if(this.props.navigation.getParam('edit')) {
+            return (
+                <View style={{flexDirection: 'row', justifyContent: 'space-evenly', width: Dimensions.get('window').width-10}}>
+                    <TouchableHighlight style={[styles.buttonContainer, {backgroundColor:'#aa3f3f'}]} onPress={() => this.props.navigation.goBack()}>
+                        <Text style={styles.buttonTextStyle}>Cancel</Text>
+                    </TouchableHighlight> 
+
+                    <TouchableHighlight style={styles.buttonContainer} onPress={() => this.handleEdit(val, foodData, nutrients)}>
+                        <Text style={styles.buttonTextStyle}>Edit</Text>
+                    </TouchableHighlight> 
+                </View>
+            )
+        }
 
         return (
             <View style={{flexDirection: 'row', justifyContent: 'space-evenly', width: Dimensions.get('window').width-10}}>
@@ -45,7 +80,7 @@ export default class Fooddetails extends Component {
                     <Text style={styles.buttonTextStyle}>Cancel</Text>
                 </TouchableHighlight> 
 
-                <TouchableHighlight style={styles.buttonContainer} onPress={() => this.handlePress(val, foodData, nutrients)}>
+                <TouchableHighlight style={styles.buttonContainer} onPress={() => this.handleAdd(val, foodData, nutrients)}>
                     <Text style={styles.buttonTextStyle}>Add</Text>
                 </TouchableHighlight> 
             </View>
@@ -54,14 +89,21 @@ export default class Fooddetails extends Component {
 
     displayNutrients = (key, foodData, val) => {
         let temp = key.split("_")
-        let title = temp.slice(temp.length-1)
+        let tempTitle = temp.slice(temp.length-1)
+        let title = tempTitle[0].charAt(0).toUpperCase() + tempTitle[0].slice(1)
+
+        let unit = 'g'
+
+        if(title === 'Cholesterol' || title === 'Sodium' || title === 'Potassium')
+            unit = 'mg'
+
         return (
             <View key={key} style={styles.macroContainer}>
                 
                 <View><Text style={[styles.textStyle, styles.macroTitle]}>{title}</Text></View>
             
                 <View style={{alignItems: 'center'}}>
-                    <Text style={[styles.textStyle, styles.macroNutrient]}>{Math.round(foodData[key]*val*10)/10}</Text>
+                    <Text style={[styles.textStyle, styles.macroNutrient]}>{Math.round(foodData[key]*val*10)/10}{unit}</Text>
                 </View>
             </View>
             
@@ -74,17 +116,20 @@ export default class Fooddetails extends Component {
 
         return (
             <View style={styles.containerStyle}>
-                {/* <TextInput 
-                    keyboardType='numeric'
-                    placeholder='Number of servings'
-                    style={styles.inputStyle}
-                    onChangeText={val => this.setState({ val })}
-                /> */}
 
                 <View style={styles.thumbnailContainerStyle}>
                     <Image 
                         style={styles.thumbnailStyle}
                         source={{ uri: foodData.photo.thumb }} />
+
+                    <View style={styles.inputContainer}>
+                        <TextInput 
+                        keyboardType='numeric'
+                        placeholder='Servings'
+                        style={styles.inputStyle}
+                        onChangeText={val => this.setState({ val })}
+                        />
+                    </View>
                 </View>
 
                 <View style={styles.allMacrosContainer}>{Object.keys(nutrients).map(key => this.displayNutrients(key, foodData, val))}</View>
@@ -114,17 +159,33 @@ const styles = StyleSheet.create({
     },
 
     thumbnailContainerStyle: {
-        justifyContent: 'center',
+        width: Dimensions.get('window').width - 70,
+        height: 100,
+        justifyContent: 'space-evenly',
+        flexDirection: 'row',
         alignItems: 'center',
         marginLeft: 10,
         marginRight: 10,
+        marginTop: 30,
         borderRadius: 5
     },
 
     thumbnailStyle: {
-        height: 80,
-        width: 80,
-        borderRadius: 5
+        height: 100,
+        width: 100,
+        borderRadius: 5,
+    },
+
+    inputContainer: {
+        borderBottomColor: '#F5FCFF',
+        backgroundColor: '#f9f6f2',
+        borderRadius:5,
+        borderBottomWidth: 1,
+        marginTop: 10,
+        width: 70,
+        height: 30,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 
     textStyle: {
@@ -133,8 +194,8 @@ const styles = StyleSheet.create({
     },
 
     inputStyle: {
-        height:45,
-        marginLeft:16,
+        height: 30,
+        width: 60,
         borderBottomColor: '#FFFFFF',
     },
 
@@ -143,7 +204,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         alignItems: 'flex-start',
-        paddingTop: 20
+        paddingTop: 10
     },
 
     macroContainer: {

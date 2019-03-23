@@ -31,22 +31,22 @@ export default class Diaryscreen extends Component {
         firebase.database().ref(`/users/${currUser.uid}/foods/${foodItem}`).remove()
     }
 
-    // editDetails = (data) => {
-    //     fetch('https://trackapi.nutritionix.com/v2/natural/nutrients', {
-    //         method: "POST",
-    //         headers: { "Content-Type": "application/json",
-    //                 "x-app-id": config.APP_ID, 
-    //                 "x-app-key": config.APP_KEY, 
-    //                 // "id":"bd4aa66e-3764-421c-a60f-e3b769f970e0", 
-    //                 // "x-remote-user-id": "0" 
-    //         },
-    //         body:JSON.stringify({
-    //             'query': data.food_name
-    //         })
-    //     }).then(res => res.json())
-    //     .then(body => this.props.navigation.navigate('Fooddetails', { foodData: body, go_back_key: this.props.navigation.state.key }))
-    //     .catch(err => console.log(err))
-    // }
+    editDetails = (data) => {
+        fetch('https://trackapi.nutritionix.com/v2/natural/nutrients', {
+            method: "POST",
+            headers: { "Content-Type": "application/json",
+                    "x-app-id": config.APP_ID, 
+                    "x-app-key": config.APP_KEY, 
+                    // "id":"bd4aa66e-3764-421c-a60f-e3b769f970e0", 
+                    // "x-remote-user-id": "0" 
+            },
+            body:JSON.stringify({
+                'query': data
+            })
+        }).then(res => res.json())
+        .then(body => this.props.navigation.navigate('Fooddetails', { foodData: body, edit: true }))
+        .catch(err => console.log(err))
+    }
 
     renderFood = (data, usersFood) => {
         let title = data.charAt(0).toUpperCase() + data.slice(1)
@@ -60,7 +60,7 @@ export default class Diaryscreen extends Component {
                 
                 <View style={{flexDirection: 'row'}}>
                     <Text style={styles.titleTextStyle}>{title}</Text>
-                    <TouchableHighlight underlayColor='transparent' style={{marginTop: 'auto', paddingLeft: 4, width:15, height:15}}>
+                    <TouchableHighlight underlayColor='transparent' onPress={() => this.editDetails(data)} style={{marginTop: 'auto', paddingLeft: 4, width:15, height:15}}>
                         <Image
                             source={require('../../assets/view.png')}
                             style={{width:15, height:15}} />
