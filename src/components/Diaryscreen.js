@@ -125,7 +125,7 @@ const styles = StyleSheet.create ({
         alignItems: 'center',
         marginBottom:10,
         marginTop:10,
-        width:150,
+        width: Dimensions.get('window').width - 50,
         borderRadius:30,
         backgroundColor: "#254E58"
     },

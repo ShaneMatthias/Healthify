@@ -15,7 +15,12 @@ export default class Profilescreen extends Component {
         )
     })
     
-    state = { haveData: false, userInfo: {} }
+    state = { 
+        haveData: false, 
+        userInfo: {},
+        dailyNeeds:{ carbohydrate: 0, protein: 0, fat: 0, sugars: 0, fiber: 0, cholesterol: 0,sodium: 0,potassium: 0 },
+        info: { age: 0, gender: '', height: 0, weight: 0, goal: '',  }
+}
     
     componentDidMount() {    
         const currUser = firebase.auth().currentUser
@@ -44,12 +49,72 @@ export default class Profilescreen extends Component {
         );
     }
 
+    displayDailyNeeds = (key, userInfo) => {
+        let title = key.charAt(0).toUpperCase() + key.slice(1)
+        let unit = 'g'
+
+        if(title === 'Cholesterol' || title === 'Sodium' || title === 'Potassium')
+            unit = 'mg'
+
+        return (
+            <View key={key} style={styles.infoContainer}>
+                <View><Text style={[styles.textStyle, styles.infoTitle]}>{title} </Text></View>
+                <View style={{alignItems: 'center'}}><Text style={[styles.textStyle, styles.infoText]}>{parseInt(userInfo[key])}{unit}</Text></View>
+            </View>
+        )
+    }
+
+    displayInfo = (key, userInfo) => {
+        let title = key.charAt(0).toUpperCase() + key.slice(1)
+        let data = ''
+
+        switch(key) {
+            case 'age': 
+                data = userInfo[key] + 'yrs' 
+                break
+            case 'gender': 
+                data = userInfo[key]
+                break
+            case 'height': 
+                data = userInfo[key] + 'cm'
+                break
+            case 'weight': 
+                data = userInfo[key] + 'kg'
+                break
+            case 'goal': 
+                switch(userInfo[key]) {
+                    case -299: 
+                        data = 'Reduce'
+                        break
+                    case 1: 
+                        data = 'Maintain'
+                        break
+                    case 301: 
+                        data = 'Gain'
+                        break
+                }
+        } 
+        
+        return (
+            <View key={key} style={styles.infoContainer}>
+                <View><Text style={[styles.textStyle, styles.infoTitle]}>{title} </Text></View>
+                <View style={{alignItems: 'center'}}><Text style={[styles.textStyle, styles.infoText]}>{data}</Text></View>
+            </View>
+        )
+    }
+
     render() {
-        const { userInfo } = this.state
+        const { userInfo, dailyNeeds, info } = this.state
         return (
             <View style={styles.containerStyle}>
 
                 <View style={styles.headerContainer}>
+                    <TouchableHighlight underlayColor='transparent' onPress={() => this.props.navigation.navigate('EditInfo')} style={{padding: 4, width:30, height:30}}>
+                        <Image
+                            source={require('../../assets/edit.png')}
+                            style={{width:30, height:30}} />
+                    </TouchableHighlight>
+
                     <TouchableHighlight underlayColor='transparent' onPress={this.handleLogOut} style={{padding: 4, width:30, height:30, marginLeft: 'auto', paddingRight: 40}}>
                         <Image
                             source={require('../../assets/logOut.png')}
@@ -66,23 +131,17 @@ export default class Profilescreen extends Component {
                     </Text>
                 </View>
 
-                <ScrollView>
-                    <Text style={[styles.textStyle, {fontSize: 16}]}>Dialy needs:</Text>
+                <ScrollView showsVerticalScrollIndicator={false} stickyHeaderIndices={[0, 2]}>
+                    <View style={styles.stickyHeaderStyle}><Text style={[styles.textStyle, {fontSize: 18}]}>Daily needs:</Text></View>
                     <View style={styles.allInfoContainer}>
-                        
+                        {Object.keys(dailyNeeds).map(key => this.displayDailyNeeds(key, userInfo))}
                     </View>
 
-                    <Text style={styles.textStyle}>Personal Info:</Text>
+                    <View style={styles.stickyHeaderStyle}><Text style={[styles.textStyle, {fontSize: 18}]}>Personal Info:</Text></View>
                     <View style={styles.allInfoContainer}>
-
+                        {Object.keys(info).map(key => this.displayInfo(key, userInfo))}
                     </View>
                 </ScrollView>
-
-                
-
-                <TouchableHighlight style={styles.buttonContainer} onPress={() => this.props.navigation.navigate('EditInfo')}>
-                    <Text style={styles.buttonTextStyle}>Edit Info</Text>
-                </TouchableHighlight>
             </View>
         )
     }
@@ -98,24 +157,49 @@ const styles = StyleSheet.create ({
 
     headerContainer: {
         width: Dimensions.get('window').width - 20,
-        height: 40
+        height: 30,
+        flexDirection: 'row'
     },
 
     titleContainer: {
         width: Dimensions.get('window').width - 30,
-        height: 100,
+        height: 80,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 6,
-        marginBottom: 10
+        marginBottom: 20
+    },
+
+    stickyHeaderStyle: {
+        backgroundColor: '#f2eee8',
+        width: Dimensions.get('window').width - 20,
+        height: 30
     },
 
     allInfoContainer: {
-
+        justifyContent: 'center',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        alignItems: 'flex-start',
+        marginBottom: 20,
+        marginTop: 10
     },
 
     infoContainer: {
+        width: 140,
+        height: 80,
+        borderRadius: 2,
+        backgroundColor: '#f9f6f2',
+        margin: 16
+    },
 
+    infoTitle: {
+        fontSize: 14,
+        padding: 4
+    },
+
+    infoText: {
+        fontSize: 18,
+        paddingTop: 6
     },
 
     buttonContainer: {
@@ -139,8 +223,5 @@ const styles = StyleSheet.create ({
         fontFamily: 'Futura',
         color: '#494949',
         fontSize: 16
-    },
-
-
-
+    }
 })
