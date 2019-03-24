@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import LoginComponent from './LoginComponent'
 import firebase from 'firebase'
 import config from '../config/config'
@@ -24,10 +24,12 @@ export default class Homescreen extends Component {
 
     render() {
         return (
-            <View style={styles.containerStyle}>
-                <Text style={styles.titleStyle}>Healthify</Text>  
-                <LoginComponent navigate={this.props.navigation}/>
-            </View>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                <View style={styles.containerStyle}>
+                    <Text style={styles.titleStyle}>Healthify</Text>  
+                    <LoginComponent navigate={this.props.navigation}/>
+                </View>
+            </TouchableWithoutFeedback>
         )
     }
 }

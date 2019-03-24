@@ -16,7 +16,7 @@ export default class Mainscreen extends Component {
 
     state = { 
         nutrients : { calories: 0, carbohydrate: 0, protein: 0, fat: 0, sugars: 0, fiber: 0, cholesterol: 0,sodium: 0,potassium: 0 },
-        userInfo: { caloricNeeds: 0 }
+        userInfo: { caloricNeeds: 0}
     }
 
     componentDidMount() {

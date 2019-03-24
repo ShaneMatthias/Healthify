@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, ActivityIndicator, TouchableHighlight, TextInput, Dimensions, StyleSheet } from 'react-native'
+import { View, Text, ActivityIndicator, TouchableHighlight, TextInput, Dimensions, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import { Image } from 'react-native-elements'
 import firebase from 'firebase'
 
@@ -115,28 +115,30 @@ export default class Fooddetails extends Component {
         const { val, nutrients } = this.state
 
         return (
-            <View style={styles.containerStyle}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                <View style={styles.containerStyle}>
 
-                <View style={styles.thumbnailContainerStyle}>
-                    <Image 
-                        style={styles.thumbnailStyle}
-                        source={{ uri: foodData.photo.thumb }} />
+                    <View style={styles.thumbnailContainerStyle}>
+                        <Image 
+                            style={styles.thumbnailStyle}
+                            source={{ uri: foodData.photo.thumb }} />
 
-                    <View style={styles.inputContainer}>
-                        <TextInput 
-                        keyboardType='numeric'
-                        placeholder='Servings'
-                        style={styles.inputStyle}
-                        onChangeText={val => this.setState({ val })}
-                        />
+                        <View style={styles.inputContainer}>
+                            <TextInput 
+                            keyboardType='numeric'
+                            placeholder='Servings'
+                            style={styles.inputStyle}
+                            onChangeText={val => this.setState({ val })}
+                            />
+                        </View>
                     </View>
+
+                    <View style={styles.allMacrosContainer}>{Object.keys(nutrients).map(key => this.displayNutrients(key, foodData, val))}</View>
+
+                    <View>{this.renderButton(val, foodData, nutrients)}</View>
+
                 </View>
-
-                <View style={styles.allMacrosContainer}>{Object.keys(nutrients).map(key => this.displayNutrients(key, foodData, val))}</View>
-
-                <View>{this.renderButton(val, foodData, nutrients)}</View>
-
-            </View>
+            </TouchableWithoutFeedback>
         )
     }
 }

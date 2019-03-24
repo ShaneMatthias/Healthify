@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, TextInput } from 'react-native'
-import { ScrollView, TouchableOpacity, TouchableHighlight, Image, Dimensions } from 'react-native';
+import { ScrollView, TouchableOpacity, TouchableHighlight, Image, Dimensions, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import config from '../config/config'
 
 export default class Foodsearch extends Component {
@@ -55,29 +55,31 @@ export default class Foodsearch extends Component {
 
     render() {
         return (
-            <View style={styles.containerStyle}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                <View style={styles.containerStyle}>
 
-                <TouchableHighlight underlayColor='transparent' onPress={() => this.props.navigation.goBack()} style={styles.backButtonStyle}>
-                    <Image
-                        source={require('../../assets/back.png')}
-                        style={{width:30, height:30}} />
-                </TouchableHighlight>  
+                    <TouchableHighlight underlayColor='transparent' onPress={() => this.props.navigation.goBack()} style={styles.backButtonStyle}>
+                        <Image
+                            source={require('../../assets/back.png')}
+                            style={{width:30, height:30}} />
+                    </TouchableHighlight>  
 
-                <View style={styles.inputContainer}>
-                    <TextInput 
-                        style={styles.inputStyle}
-                        value={this.state.value}
-                        placeholder="Type in food"
-                        value={this.state.search}
-                        onChangeText={search => this.onTextChange(search)}
-                        />
+                    <View style={styles.inputContainer}>
+                        <TextInput 
+                            style={styles.inputStyle}
+                            value={this.state.value}
+                            placeholder="Type in food"
+                            value={this.state.search}
+                            onChangeText={search => this.onTextChange(search)}
+                            />
+                    </View>
+
+                    <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle}>
+                        {this.displaySearches()}
+                    </ScrollView>
+
                 </View>
-
-                <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewStyle}>
-                    {this.displaySearches()}
-                </ScrollView>
-
-            </View>
+            </TouchableWithoutFeedback>
         )
     }
 }

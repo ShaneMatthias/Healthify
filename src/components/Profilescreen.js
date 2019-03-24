@@ -17,9 +17,9 @@ export default class Profilescreen extends Component {
     
     state = { 
         haveData: false, 
-        userInfo: {},
+        userInfo: { carbohydrate: 0, protein: 0, fat: 0, sugars: 0, fiber: 0, cholesterol: 0,sodium: 0,potassium: 0, age: 0, gender: '', height: 0, weight: 0, goal: ''} ,
         dailyNeeds:{ carbohydrate: 0, protein: 0, fat: 0, sugars: 0, fiber: 0, cholesterol: 0,sodium: 0,potassium: 0 },
-        info: { age: 0, gender: '', height: 0, weight: 0, goal: '',  }
+        info: { age: 0, gender: '', height: 0, weight: 0, goal: ''  }
 }
     
     componentDidMount() {    
@@ -59,7 +59,7 @@ export default class Profilescreen extends Component {
         return (
             <View key={key} style={styles.infoContainer}>
                 <View><Text style={[styles.textStyle, styles.infoTitle]}>{title} </Text></View>
-                <View style={{alignItems: 'center'}}><Text style={[styles.textStyle, styles.infoText]}>{parseInt(userInfo[key])}{unit}</Text></View>
+                <View style={{alignItems: 'center'}}><Text style={[styles.textStyle, styles.infoText]}>{Math.floor(parseInt(userInfo[key]))}{unit}</Text></View>
             </View>
         )
     }
@@ -70,16 +70,16 @@ export default class Profilescreen extends Component {
 
         switch(key) {
             case 'age': 
-                data = userInfo[key] + 'yrs' 
+                data = Math.floor(userInfo[key]) + 'yrs' 
                 break
             case 'gender': 
                 data = userInfo[key]
                 break
             case 'height': 
-                data = userInfo[key] + 'cm'
+                data = Math.floor(userInfo[key]) + 'cm'
                 break
             case 'weight': 
-                data = userInfo[key] + 'kg'
+                data = Math.floor(userInfo[key]) + 'kg'
                 break
             case 'goal': 
                 switch(userInfo[key]) {
@@ -124,10 +124,10 @@ export default class Profilescreen extends Component {
 
                 <View style={styles.titleContainer}>
                     <Text style={styles.textStyle}>
-                        Your body burns <Text style={{fontSize: 20}}>{Math.floor(Math.round(userInfo['bmi']*10)/10)}</Text> calories a day
+                        Your body burns <Text style={{fontSize: 20}}>{userInfo['bmi'] ? Math.floor(Math.round(userInfo['bmi']*10)/10) : 0}</Text> calories a day
                     </Text>
                     <Text style={styles.textStyle}>
-                        You need to maintain <Text style={{fontSize: 20}}>{Math.floor(Math.round(userInfo['caloricNeeds']*10)/10)}</Text> calories per day
+                        You need to maintain <Text style={{fontSize: 20}}>{userInfo['caloricNeeds'] ? Math.floor(Math.round(userInfo['caloricNeeds']*10)/10) : 0}</Text> calories per day
                     </Text>
                 </View>
 
