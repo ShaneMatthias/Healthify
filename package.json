@@ -10,7 +10,7 @@
     "axios": "^0.18.0",
     "firebase": "^5.9.0",
     "react": "16.6.3",
-    "react-native": "0.58.3",
+    "react-native": "0.58.6",
     "react-native-elements": "^1.1.0",
     "react-native-gesture-handler": "^1.1.0",
     "react-native-progress-bar-animated": "^1.0.6",
